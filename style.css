@@ -1,0 +1,47 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f4f8; /* Fallback background */
+    background-image: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+    min-height: 100vh;
+}
+
+.main-card {
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.favorite-item {
+    transition: all 0.3s ease;
+}
+
+.gradient-text {
+    background: linear-gradient(45deg, #6b21a8, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-link.active {
+    color: #4f46e5;
+    font-weight: 600;
+}
+
+/* Focus style for accessibility */
+.delete-fav-btn:focus {
+    outline: 2px solid #4f46e5;
+    outline-offset: 2px;
+}
+
+.tinder-gradient {
+    background: linear-gradient(to top right, #FD297B, #FF655B);
+}

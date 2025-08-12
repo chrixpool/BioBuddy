@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioBuddy - Creative Bio & Caption Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Fallback background */
+            background-image: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            min-height: 100vh;
+        }
+        .main-card {
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .favorite-item {
+            transition: all 0.3s ease;
+        }
+        .gradient-text {
+            background: linear-gradient(45deg, #6b21a8, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-link.active {
+            color: #4f46e5;
+            font-weight: 600;
+        }
+        /* Focus style for accessibility */
+        .delete-fav-btn:focus {
+            outline: 2px solid #4f46e5;
+            outline-offset: 2px;
+        }
+        .tinder-gradient {
+            background: linear-gradient(to top right, #FD297B, #FF655B);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Navigation Bar -->
+    <nav class="bg-white/70 backdrop-blur-sm shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <a href="#" data-page="home" class="nav-link text-2xl font-bold gradient-text">BioBuddy</a>
+                </div>
+                <div class="hidden md:block">
+                    <div id="nav-links" class="ml-10 flex items-baseline space-x-4">
+                        <a href="#" data-page="home" class="nav-link text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition active">Home</a>
+                        <a href="#" data-page="faq" class="nav-link text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition">FAQ</a>
+                        <a href="#" data-page="contact" class="nav-link text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium transition">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-4xl">
+        <!-- Page: Home (Generator) -->
+        <div id="page-home" class="page-content fade-in">
+            <header class="text-center mb-10">
+                <h1 class="text-4xl sm:text-5xl font-extrabold gradient-text">Creative Bio & Caption Hub</h1>
+                <p class="text-gray-600 mt-3 text-lg">Instantly generate creative text for your profiles.</p>
+            </header>
+
+            <main class="main-card p-6 sm:p-8 rounded-2xl shadow-xl">
+                <!-- Controls -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    <div>
+                        <label for="platform" class="block text-sm font-medium text-gray-700 mb-1">Platform</label>
+                        <select id="platform" class="w-full p-3 bg-gray-50 border-gray-300 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"></select>
+                    </div>
+                    <div>
+                        <label for="contentType" class="block text-sm font-medium text-gray-700 mb-1">Content Type</label>
+                        <select id="contentType" class="w-full p-3 bg-gray-50 border-gray-300 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"></select>
+                    </div>
+                    <div>
+                        <label for="tone" class="block text-sm font-medium text-gray-700 mb-1">Tone / Style</label>
+                        <select id="tone" class="w-full p-3 bg-gray-50 border-gray-300 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition"></select>
+                    </div>
+                     <div>
+                        <label for="keyword-input" class="block text-sm font-medium text-gray-700 mb-1">Keywords</label>
+                        <input type="text" id="keyword-input" placeholder="e.g. travel, food" class="w-full p-3 bg-gray-50 border-gray-300 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition" />
+                    </div>
+                </div>
+                 <div class="mt-6">
+                    <button id="generate-btn" class="w-full p-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition transform hover:scale-105 shadow-lg flex items-center justify-center gap-2">
+                        Generate
+                    </button>
+                </div>
+                
+                <!-- Platform Previews -->
+                <div id="platform-preview-container" class="mt-8 mb-4 p-4 border border-gray-200 rounded-xl bg-white/50">
+                    <!-- Instagram Preview -->
+                    <div id="preview-instagram" class="platform-preview hidden font-sans">
+                        <div class="flex items-center justify-between p-2 border-b border-gray-200">
+                             <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                             <div class="font-bold text-gray-800">your_username</div>
+                             <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
+                        </div>
+                        <div class="p-4 flex items-center space-x-4">
+                            <div class="w-20 h-20 bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 rounded-full p-1">
+                                <div class="bg-white p-1 rounded-full"><div class="w-full h-full bg-gray-300 rounded-full"></div></div>
+                            </div>
+                            <div class="flex-1 flex justify-around text-center">
+                                <div><span class="font-bold">123</span><br><span class="text-sm text-gray-500">Posts</span></div>
+                                <div><span class="font-bold">456</span><br><span class="text-sm text-gray-500">Followers</span></div>
+                                <div><span class="font-bold">789</span><br><span class="text-sm text-gray-500">Following</span></div>
+                            </div>
+                        </div>
+                        <div class="px-4 pb-2">
+                            <p class="font-semibold text-sm">Your Name</p>
+                            <p id="preview-instagram-text" class="text-sm whitespace-pre-wrap mt-1">Your generated bio will appear here.</p>
+                        </div>
+                         <div class="px-4 pb-4"><button class="w-full bg-blue-500 text-white text-sm font-semibold py-1.5 rounded-md">Follow</button></div>
+                    </div>
+                    <!-- LinkedIn Preview -->
+                    <div id="preview-linkedin" class="platform-preview hidden rounded-lg overflow-hidden border border-gray-300">
+                       <div class="bg-gray-500 h-20"></div>
+                       <div class="p-4 bg-white">
+                           <div class="w-24 h-24 bg-gray-300 rounded-full -mt-16 border-4 border-white mx-auto sm:mx-0"></div>
+                           <div class="font-bold text-xl mt-2">Your Name</div>
+                           <p id="preview-linkedin-text" class="text-sm text-gray-800 mt-1 whitespace-pre-wrap">Your generated headline will appear here.</p>
+                           <p class="text-xs text-gray-500 mt-2">City, Country ・ Contact info</p>
+                           <div class="mt-4"><button class="bg-blue-600 text-white font-semibold py-1 px-4 rounded-full text-sm">Connect</button></div>
+                       </div>
+                    </div>
+                    <!-- Tinder Preview -->
+                    <div id="preview-tinder" class="platform-preview hidden rounded-2xl overflow-hidden shadow-lg max-w-xs mx-auto">
+                        <div class="h-64 bg-gray-300 relative">
+                           <div class="absolute bottom-0 left-0 p-4 text-white w-full bg-gradient-to-t from-black/60 to-transparent">
+                                <div class="font-bold text-2xl">You, 25</div>
+                           </div>
+                        </div>
+                        <div class="bg-white p-4">
+                            <p id="preview-tinder-text" class="text-sm whitespace-pre-wrap text-gray-700">Your generated bio will appear here.</p>
+                        </div>
+                        <div class="bg-white p-2 flex justify-around items-center">
+                            <button class="w-10 h-10 rounded-full flex items-center justify-center bg-white shadow-md"><svg class="w-6 h-6 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg></button>
+                            <button class="w-12 h-12 rounded-full flex items-center justify-center bg-white shadow-md"><svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                            <button class="w-10 h-10 rounded-full flex items-center justify-center bg-white shadow-md"><svg class="w-6 h-6 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg></button>
+                            <button class="w-12 h-12 rounded-full flex items-center justify-center bg-white shadow-md"><svg class="w-8 h-8 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" /></svg></button>
+                            <button class="w-10 h-10 rounded-full flex items-center justify-center bg-white shadow-md"><svg class="w-6 h-6 text-purple-500" fill="currentColor" viewBox="0 0 20 20"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></button>
+                        </div>
+                    </div>
+                    <!-- Generic Preview -->
+                     <div id="preview-general" class="platform-preview hidden">
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <p id="preview-general-text" class="text-sm whitespace-pre-wrap">Your generated text will appear here.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hidden Textarea for functionality -->
+                <textarea id="preview-box" class="hidden"></textarea>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button id="copy-btn" class="flex-1 p-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        Copy Text
+                    </button>
+                    <button id="save-btn" class="flex-1 p-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" /></svg>
+                        Save to Favorites
+                    </button>
+                </div>
+                 <div id="message-box" class="mt-4 p-3 text-center rounded-lg text-sm transition-opacity duration-300 opacity-0"></div>
+            </main>
+            <!-- Favorites Section -->
+            <section id="favorites-section" class="mt-12">
+                <h2 class="text-3xl font-bold text-center mb-6 text-white text-opacity-90">Your Favorites</h2>
+                <div id="favorites-list" class="space-y-3"></div>
+                <p id="no-favorites" class="text-center text-white text-opacity-70 mt-4">You haven't saved any favorites yet.</p>
+            </section>
+        </div>
+
+        <!-- Page: FAQ -->
+        <div id="page-faq" class="page-content hidden fade-in">
+            <header class="text-center mb-10">
+                <h1 class="text-4xl sm:text-5xl font-extrabold gradient-text">Frequently Asked Questions</h1>
+            </header>
+            <main class="main-card p-6 sm:p-8 rounded-2xl shadow-xl space-y-6">
+                <div class="faq-item">
+                    <h3 class="text-xl font-semibold text-gray-800">What is BioBuddy?</h3>
+                    <p class="text-gray-600 mt-2">BioBuddy is a creative tool designed to help you generate bios and captions for your social media profiles. Whether you need a professional headline for LinkedIn or a funny bio for Tinder, we've got you covered!</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="text-xl font-semibold text-gray-800">How does the generator work?</h3>
+                    <p class="text-gray-600 mt-2">Just enter keywords, select a platform and a tone, then click generate! BioBuddy uses a sophisticated library of text components to build a unique, natural-sounding bio or caption tailored to your needs.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="text-xl font-semibold text-gray-800">Can I save my favorite generations?</h3>
+                    <p class="text-gray-600 mt-2">Absolutely! When you generate a bio or caption you like, just click the "Save to Favorites" button. It will be saved in your browser's local storage, so you can access it later from the "Your Favorites" section on the home page.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="text-xl font-semibold text-gray-800">Is BioBuddy free to use?</h3>
+                    <p class="text-gray-600 mt-2">Yes, BioBuddy is completely free to use. Enjoy generating as many bios and captions as you need!</p>
+                </div>
+            </main>
+        </div>
+
+        <!-- Page: Contact -->
+        <div id="page-contact" class="page-content hidden fade-in">
+            <header class="text-center mb-10">
+                <h1 class="text-4xl sm:text-5xl font-extrabold gradient-text">Get In Touch</h1>
+                <p class="text-gray-600 mt-3 text-lg">Have a question or feedback? We'd love to hear from you.</p>
+            </header>
+            <main class="main-card p-6 sm:p-8 rounded-2xl shadow-xl">
+                <form id="contact-form">
+                    <div class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                            <input type="text" id="name" name="name" class="mt-1 block w-full p-3 bg-gray-50 border-gray-300 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500" required>
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" id="email" name="email" class="mt-1 block w-full p-3 bg-gray-50 border-gray-300 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500" required>
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                            <textarea id="message" name="message" rows="4" class="mt-1 block w-full p-3 bg-gray-50 border-gray-300 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500" required></textarea>
+                        </div>
+                        <div>
+                             <button type="submit" id="contact-submit-btn" class="w-full p-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition transform hover:scale-105 shadow-lg">
+                                Send Message
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div id="contact-message-box" class="mt-4 p-3 text-center rounded-lg text-sm transition-opacity duration-300 opacity-0"></div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- CONFIGURATION ---
+            const emailjsConfig = {
+                publicKey: "YOUR_PUBLIC_KEY",
+                serviceID: "YOUR_SERVICE_ID",
+                templateID: "YOUR_TEMPLATE_ID"
+            };
+            
+            const library = {
+                instagram: {
+                    bio: {
+                        casual: { patterns: ["Living for {keyword1}. ✨ Fueled by coffee and {keyword2}.", "Just a human obsessed with {keyword1} and {keyword2}.", "My world: {keyword1}, {keyword2}, and good vibes only. ✌️", "On a quest for the best {keyword1}. Join my adventure!"], emojis: ["🌿", "💖", "☀️", "📍"], hashtags: ["#{keyword1}life", "#{keyword2}lover", "#goodvibes", "#instadaily"] },
+                        professional: { patterns: ["Sharing my professional journey in {keyword1} & {keyword2}.", "Content creator focused on {keyword1}, with expertise in {keyword2}.", "Helping brands grow through {keyword1} and digital strategy.", "Exploring the intersection of {keyword1} and {keyword2}."], emojis: ["📈", "💡", "🚀", "💼"], hashtags: ["#{keyword1}", "#{keyword2}", "#business", "#expert"] },
+                        funny: { patterns: ["My personality is 50% {keyword1} and 50% {keyword2}. 🤪", "Powered by an unhealthy obsession with {keyword1} and tacos.", "I'm not a regular mom, I'm a {keyword1}-loving mom who also enjoys {keyword2}.", "Warning: may spontaneously start talking about {keyword1}."], emojis: ["😂", "🌮", "🤷‍♀️", "✨"], hashtags: ["#{keyword1}addict", "#funnybio", "#realtalk"] },
+                        inspirational: { patterns: ["Creating a life I love, fueled by {keyword1} and {keyword2}.", "On a mission to make the world better through {keyword1}.", "Dreaming big and finding inspiration in {keyword1}."], emojis: ["💫", " ", "🙏", "🌟"], hashtags: ["#{keyword1}journey", "#inspiration", "#motivation", "#dreambig"] }
+                    },
+                    caption: {
+                        casual: { patterns: ["All about the {keyword1} vibes today.", "{keyword1} and {keyword2}: a perfect match.", "Couldn't resist sharing this {keyword1} moment."], emojis: ["📸", "🙌", "💯"], hashtags: ["#{keyword1}", "#{keyword2}gram", "#moments"] },
+                        funny: { patterns: ["They said 'act natural'. So I did my {keyword1} thing.", "Is it a {keyword1} day or a {keyword2} day? Why not both?"], emojis: ["😜", "😎"], hashtags: ["#{keyword1}chronicles", "#captionthis"] }
+                    }
+                },
+                linkedin: {
+                    bio: {
+                        professional: { patterns: ["Results-driven professional specializing in {keyword1} and {keyword2}.", "Innovative problem-solver with a passion for {keyword1} and scalable solutions.", "Seeking new opportunities to drive growth in the {keyword1} sector.", "Expert in {keyword1} with a proven track record in {keyword2}."], emojis: [], hashtags: [] },
+                        casual: { patterns: ["Passionate about the intersection of technology and {keyword1}.", "Exploring new trends in {keyword1} and {keyword2}.", "Let's connect and talk about {keyword1}!"], emojis: [], hashtags: [] }
+                    }
+                },
+                tinder: {
+                    bio: {
+                        funny: { patterns: ["My two favorite things are {keyword1} and {keyword2}. And maybe you. 😉", "Looking for someone who can talk about {keyword1} for hours. I'll bring the snacks.", "Must love dogs and have a tolerance for my {keyword1} obsession."], emojis: ["🍟", "🍻", "🐶", "😂"], hashtags: [] },
+                        casual: { patterns: ["Seeking adventures, good conversations, and someone who also likes {keyword1}.", "Let's find a new {keyword1} spot together, or just chill with some {keyword2}.", "Looking for my partner in crime for {keyword1} and beyond."], emojis: ["😊", "🌲", "✈️", "🌊"], hashtags: [] }
+                    }
+                },
+                general: {
+                    caption: {
+                        casual: { patterns: ["All about that {keyword1} life.", "Just enjoying some {keyword1} and {keyword2}."], emojis: ["👍", "😊"], hashtags: [] }
+                    }
+                }
+            };
+            
+            const platformLimits = { instagram: { bio: 150, caption: 2200 }, linkedin: { headline: 220, bio: 2600 }, tinder: { bio: 500 } };
+
+            // --- DOM ELEMENTS CACHE ---
+            const dom = {
+                platformSelect: document.getElementById('platform'),
+                contentTypeSelect: document.getElementById('contentType'),
+                toneSelect: document.getElementById('tone'),
+                keywordInput: document.getElementById('keyword-input'),
+                generateBtn: document.getElementById('generate-btn'),
+                previewBox: document.getElementById('preview-box'),
+                copyBtn: document.getElementById('copy-btn'),
+                saveBtn: document.getElementById('save-btn'),
+                favoritesList: document.getElementById('favorites-list'),
+                noFavoritesMsg: document.getElementById('no-favorites'),
+                messageBox: document.getElementById('message-box'),
+                contactForm: document.getElementById('contact-form'),
+                contactSubmitBtn: document.getElementById('contact-submit-btn'),
+                contactMessageBox: document.getElementById('contact-message-box'),
+                pageContents: document.querySelectorAll('.page-content'),
+                nav: document.querySelector('nav'),
+                platformPreviews: document.querySelectorAll('.platform-preview')
+            };
+
+            // --- FUNCTIONS ---
+            function showPage(pageId) {
+                dom.pageContents.forEach(page => page.classList.add('hidden'));
+                const targetPage = document.getElementById(`page-${pageId}`);
+                if (targetPage) targetPage.classList.remove('hidden');
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.dataset.page === pageId) link.classList.add('active');
+                });
+            }
+            
+            function populateDropdown(selectElement, options) {
+                if (selectElement) {
+                    selectElement.innerHTML = options.map(opt => `<option value="${opt}">${opt.charAt(0).toUpperCase() + opt.slice(1)}</option>`).join('');
+                }
+            }
+
+            function updateDropdowns() {
+                const platform = dom.platformSelect.value;
+                const platformLib = library[platform] || {};
+                
+                const contentTypes = Object.keys(platformLib);
+                populateDropdown(dom.contentTypeSelect, contentTypes);
+
+                const contentType = dom.contentTypeSelect.value;
+                const tones = (platformLib[contentType] && Object.keys(platformLib[contentType])) || [];
+                populateDropdown(dom.toneSelect, tones);
+            }
+            
+            function updatePlatformPreview() {
+                const platform = dom.platformSelect.value;
+                dom.platformPreviews.forEach(p => p.classList.add('hidden'));
+                let previewToShow = document.getElementById(`preview-${platform}`);
+                if (!previewToShow) {
+                    previewToShow = document.getElementById('preview-general');
+                }
+                previewToShow.classList.remove('hidden');
+            }
+
+            function getRandomElement(arr) {
+                if (!arr || arr.length === 0) return "";
+                return arr[Math.floor(Math.random() * arr.length)];
+            }
+            
+            function generateCreativeText() {
+                const platform = dom.platformSelect.value;
+                const contentType = dom.contentTypeSelect.value;
+                const tone = dom.toneSelect.value;
+                
+                let allKeywords = [];
+                if (dom.keywordInput?.value) {
+                    allKeywords = dom.keywordInput.value.replace(/,/g, ' ').split(' ').map(k => k.trim()).filter(k => k.length > 0);
+                }
+                if (allKeywords.length === 0) allKeywords.push("life");
+
+                let lib = library[platform]?.[contentType]?.[tone];
+                if (!lib) {
+                    dom.previewBox.value = "No creative formulas available for this selection. Please try another.";
+                    return;
+                }
+
+                const keyword1 = getRandomElement(allKeywords);
+                let keyword2 = getRandomElement(allKeywords.filter(k => k !== keyword1)) || "good vibes";
+
+                let pattern = getRandomElement(lib.patterns);
+                let text = pattern.replace(/{keyword1}/g, keyword1).replace(/{keyword2}/g, keyword2);
+
+                const emoji = getRandomElement(lib.emojis);
+                if (emoji) text += ` ${emoji}`;
+
+                if ((platform === 'instagram' || platform === 'tiktok') && lib.hashtags) {
+                    let generatedHashtags = new Set();
+                    allKeywords.slice(0, 2).forEach(kw => generatedHashtags.add(`#${kw.replace(/\s+/g, '')}`));
+                    if (lib.hashtags.length > 0) generatedHashtags.add(getRandomElement(lib.hashtags));
+                    if (generatedHashtags.size > 0) text += `\n\n${[...generatedHashtags].join(' ')}`;
+                }
+
+                const limit = platformLimits[platform]?.[contentType];
+                if (limit && text.length > limit) text = text.substring(0, limit);
+
+                dom.previewBox.value = text;
+                const previewTextElement = document.getElementById(`preview-${platform}-text`) || document.getElementById('preview-general-text');
+                if (previewTextElement) {
+                    previewTextElement.innerText = text;
+                }
+                
+                dom.copyBtn.disabled = false;
+                dom.saveBtn.disabled = false;
+            }
+
+            function copyText() {
+                if (!dom.previewBox.value) return;
+                const textarea = document.createElement('textarea');
+                textarea.value = dom.previewBox.value;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    showMessage(dom.messageBox, 'Copied to clipboard!', 'success');
+                } catch (err) { console.error('Failed to copy text: ', err); }
+                document.body.removeChild(textarea);
+            }
+            
+            function showMessage(element, text, type = 'success', persistent = false) {
+                element.textContent = text;
+                element.className = `mt-4 p-3 text-center rounded-lg text-sm transition-opacity duration-300 opacity-100 ${ type === 'success' ? 'bg-green-100 text-green-800' : type === 'error' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800' }`;
+                if (!persistent) {
+                    setTimeout(() => { element.classList.add('opacity-0'); }, 4000);
+                }
+            }
+
+            function saveFavorite() {
+                const text = dom.previewBox.value;
+                if (!text) return;
+                const favorites = getFavorites();
+                if (!favorites.includes(text)) {
+                    favorites.unshift(text);
+                    localStorage.setItem('bioBuddyFavorites', JSON.stringify(favorites));
+                    renderFavorites();
+                    showMessage(dom.messageBox, 'Saved to favorites!', 'info');
+                } else { showMessage(dom.messageBox, 'Already in favorites.', 'info'); }
+            }
+
+            function getFavorites() { return JSON.parse(localStorage.getItem('bioBuddyFavorites')) || []; }
+            
+            function renderFavorites() {
+                if (!dom.favoritesList) return;
+                const favorites = getFavorites();
+                dom.favoritesList.innerHTML = '';
+                if (favorites.length === 0) {
+                    dom.noFavoritesMsg.style.display = 'block';
+                    dom.favoritesList.style.display = 'none';
+                } else {
+                    dom.noFavoritesMsg.style.display = 'none';
+                    dom.favoritesList.style.display = 'block';
+                    favorites.forEach((fav, index) => {
+                        const item = document.createElement('div');
+                        item.className = 'favorite-item flex items-center justify-between bg-white/80 p-4 rounded-lg shadow-md fade-in';
+                        
+                        const textPara = document.createElement('p');
+                        textPara.className = 'text-gray-700 flex-1 mr-4 whitespace-pre-wrap';
+                        textPara.innerText = fav;
+
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.setAttribute('aria-label', 'Delete favorite');
+                        deleteBtn.dataset.index = index;
+                        deleteBtn.className = 'delete-fav-btn flex-shrink-0 w-8 h-8 rounded-full bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center transition';
+                        deleteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>`;
+                        
+                        item.appendChild(textPara);
+                        item.appendChild(deleteBtn);
+                        dom.favoritesList.appendChild(item);
+                    });
+                }
+            }
+
+            function deleteFavorite(indexStr) {
+                const index = parseInt(indexStr, 10);
+                if (isNaN(index)) {
+                    console.error("Invalid index for deleteFavorite:", indexStr);
+                    return;
+                }
+                let favorites = getFavorites();
+                if (index >= 0 && index < favorites.length) {
+                    favorites.splice(index, 1);
+                    localStorage.setItem('bioBuddyFavorites', JSON.stringify(favorites));
+                    renderFavorites();
+                } else {
+                    console.error("Index out of bounds for deleteFavorite:", index);
+                }
+            }
+            
+            function setupEventListeners() {
+                dom.nav.addEventListener('click', (e) => {
+                    const targetLink = e.target.closest('.nav-link');
+                    if (targetLink?.dataset.page) {
+                        e.preventDefault();
+                        showPage(targetLink.dataset.page);
+                    }
+                });
+
+                if (dom.generateBtn) dom.generateBtn.addEventListener('click', generateCreativeText);
+                if (dom.copyBtn) dom.copyBtn.addEventListener('click', copyText);
+                if (dom.saveBtn) dom.saveBtn.addEventListener('click', saveFavorite);
+                if (dom.platformSelect) dom.platformSelect.addEventListener('change', () => {
+                    updateDropdowns();
+                    updatePlatformPreview();
+                });
+                if (dom.contentTypeSelect) dom.contentTypeSelect.addEventListener('change', updateDropdowns);
+                
+                if (dom.favoritesList) {
+                    dom.favoritesList.addEventListener('click', (e) => {
+                        const deleteBtn = e.target.closest('.delete-fav-btn');
+                        if (deleteBtn) deleteFavorite(deleteBtn.dataset.index);
+                    });
+                }
+
+                if (dom.contactForm) {
+                    dom.contactForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        dom.contactSubmitBtn.disabled = true;
+                        dom.contactSubmitBtn.textContent = 'Sending...';
+
+                        emailjs.sendForm(emailjsConfig.serviceID, emailjsConfig.templateID, this)
+                            .then(() => {
+                                showMessage(dom.contactMessageBox, "Thanks for your message! We'll get back to you soon.", 'success', true);
+                                dom.contactForm.reset();
+                            }, (err) => {
+                                showMessage(dom.contactMessageBox, `Failed to send message. Error: ${err.text || JSON.stringify(err)}`, 'error', true);
+                            })
+                            .finally(() => {
+                                dom.contactSubmitBtn.disabled = false;
+                                dom.contactSubmitBtn.textContent = 'Send Message';
+                            });
+                    });
+                }
+            }
+
+            // --- INITIALIZATION ---
+            function init() {
+                if (emailjsConfig.publicKey !== "YOUR_PUBLIC_KEY") {
+                    emailjs.init({ publicKey: emailjsConfig.publicKey });
+                }
+                setupEventListeners();
+                showPage('home');
+                if (dom.platformSelect) {
+                    populateDropdown(dom.platformSelect, Object.keys(library));
+                    updateDropdowns();
+                    updatePlatformPreview();
+                }
+                renderFavorites();
+            }
+
+            init();
+        });
+    </script>
+</body>
+</html>
