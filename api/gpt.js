@@ -30,4 +30,5 @@ export default async function handler(req, res) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });
   }
+	console.log('OPENAI_API_KEY set:', Boolean(process.env.OPENAI_API_KEY));
 }
