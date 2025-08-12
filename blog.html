@@ -1,39 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog - BioBuddy</title>
-  <meta name="description" content="Read BioBuddy's latest tips on LinkedIn bios, TikTok emojis, YouTube descriptions, Facebook profile optimization, and social media sizes.">
-  <link rel="stylesheet" href="styles.css"> <!-- Your existing CSS -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioBuddy Blog</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #09162e;
+            padding: 1rem 2rem;
+            text-align: center;
+            color: #fff;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #09162e;
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #09162e;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #133f74;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="faq.html">FAQ</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="blog.html" class="active">Blog</a></li>
-      </ul>
-    </nav>
-  </header>
+    <header>
+        <h1>BioBuddy Blog</h1>
+    </header>
 
-  <main>
-    <h1>Our Blog</h1>
-    <p>Explore our articles and guides to boost your social media presence.</p>
+    <div class="container">
+        <div class="grid">
+            <div class="card">
+                <div class="card-content">
+                    <div class="card-title">Importance of LinkedIn Professional Bios</div>
+                    <div class="card-desc">Learn why a well-crafted LinkedIn bio is essential for building credibility and attracting opportunities.</div>
+                    <a href="importance-of-linkedin-professional-bios.html" class="btn">Read More</a>
+                </div>
+            </div>
 
-    <ul class="blog-list">
-      <li><a href="importance-of-linkedin-professional-bios.html">Importance of LinkedIn Professional Bios</a></li>
-      <li><a href="tiktok-emojis.html">TikTok Emojis</a></li>
-      <li><a href="youtube-videos-descriptions.html">YouTube Videos Descriptions</a></li>
-      <li><a href="how-to-add-digital-creator-to-facebook-profile.html">How to Add Digital Creator to Facebook Profile</a></li>
-      <li><a href="best-size-for-social-media-posts.html">Best Size for Social Media Posts</a></li>
-    </ul>
-  </main>
+            <div class="card">
+                <div class="card-content">
+                    <div class="card-title">TikTok Emojis</div>
+                    <div class="card-desc">Explore the most popular TikTok emojis and how to use them to boost engagement on your content.</div>
+                    <a href="tiktok-emojis.html" class="btn">Read More</a>
+                </div>
+            </div>
 
-  <footer>
-    <p>© 2025 BioBuddy. All rights reserved.</p>
-  </footer>
+            <div class="card">
+                <div class="card-content">
+                    <div class="card-title">YouTube Video Descriptions</div>
+                    <div class="card-desc">Discover the best practices for writing YouTube descriptions that increase views and improve SEO.</div>
+                    <a href="youtube-videos-descriptions.html" class="btn">Read More</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-content">
+                    <div class="card-title">How to Add Digital Creator to Facebook Profile</div>
+                    <div class="card-desc">Step-by-step guide to adding the Digital Creator tag to your Facebook profile for better branding.</div>
+                    <a href="how-to-add-digital-creator-to-facebook-profile.html" class="btn">Read More</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-content">
+                    <div class="card-title">Best Size for Social Media Posts</div>
+                    <div class="card-desc">The ultimate guide to image and video sizes for Facebook, Instagram, TikTok, and more.</div>
+                    <a href="best-size-for-social-media-posts.html" class="btn">Read More</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
