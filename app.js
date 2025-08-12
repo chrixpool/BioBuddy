@@ -296,3 +296,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     init();
 });
+
+// assets/js/main.js (or script.js)
+async function callGPT(prompt) {
+  const res = await fetch('/api/gpt', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt })
+  });
+  const json = await res.json();
+  return json.text || '';
+}
+
+document.getElementById('generate-btn').addEventListener('click', async () => {
+  const prompt = document.getElementById('keyword-input').value || "generate a short instagram bio";
+  const result = await callGPT(prompt);
+  // show result in preview and textarea
+  document.getElementById('preview-box').value = result;
+  document.getElementById('preview-general-text').innerText = result;
+});
+
