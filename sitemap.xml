@@ -1,35 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.biobuddy-tau.vercel.app//</loc>
+    <loc>https://www.biobuddy-tau.vercel.app/</loc>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.biobuddy-tau.vercel.app//faq.html</loc>
+    <loc>https://www.biobuddy-tau.vercel.app/faq.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.biobuddy-tau.vercel.app//blog.html</loc>
+    <loc>https://www.biobuddy-tau.vercel.app/blog.html</loc>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.biobuddy-tau.vercel.app//linkedin-bios.html</loc>
+    <loc>https://www.biobuddy-tau.vercel.app/linkedin-bios.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.biobuddy-tau.vercel.app//tiktok-emojis.html</loc>
+    <loc>https://www.biobuddy-tau.vercel.app/tiktok-emojis.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.biobuddy-tau.vercel.app//youtube-descriptions.html</loc>
+    <loc>https://www.biobuddy-tau.vercel.app/youtube-descriptions.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.biobuddy-tau.vercel.app//facebook-digital-creator.html</loc>
+    <loc>https://www.biobuddy-tau.vercel.app/facebook-digital-creator.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.biobuddy-tau.vercel.app//social-media-size.html</loc>
+    <loc>https://www.biobuddy-tau.vercel.app/social-media-size.html</loc>
     <priority>0.8</priority>
   </url>
 </urlset>
+
