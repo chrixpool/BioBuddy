@@ -2,34 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://biobuddy-tau.vercel.app/</loc>
+    <lastmod>2025-08-13</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://biobuddy-tau.vercel.app/faq.html</loc>
+    <lastmod>2025-08-13</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://biobuddy-tau.vercel.app/blog.html</loc>
+    <lastmod>2025-08-13</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://biobuddy-tau.vercel.app/linkedin-bios.html</loc>
+    <lastmod>2025-08-13</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://biobuddy-tau.vercel.app/tiktok-emojis.html</loc>
+    <lastmod>2025-08-13</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://biobuddy-tau.vercel.app/youtube-descriptions.html</loc>
+    <lastmod>2025-08-13</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://biobuddy-tau.vercel.app/facebook-digital-creator.html</loc>
+    <lastmod>2025-08-13</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://biobuddy-tau.vercel.app/social-media-size.html</loc>
+    <lastmod>2025-08-13</lastmod>
     <priority>0.8</priority>
   </url>
 </urlset>
